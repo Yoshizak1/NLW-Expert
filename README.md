@@ -5,3 +5,7 @@ Projeto feito no Evento NLW Expert da Rocketseat
 - HTML
 - CSS
 - JavaScript
+
+### GitHub Pages
+
+https://yoshizak1.github.io/NLW-Expert/
