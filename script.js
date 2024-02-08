@@ -88,42 +88,49 @@ const perguntas = [
 const quiz = document.querySelector("#quiz");
 const template = document.querySelector("template");
 
-const corretas = new Set()
+const corretas = new Set();
 const totalDePerguntas = perguntas.length;
 const mostrarTotal = document.querySelector('#acertos span');
-mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas
+mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas;
 
-for (const item of perguntas) {
-  //clona as perguntas
+for (const [index, item] of perguntas.entries()) {
+  // clona as perguntas
   const quizItem = template.content.cloneNode(true);
-  //modifica o h3
+  // modifica o h3
   quizItem.querySelector("h3").textContent = item.pergunta;
-  for (let resposta of item.respostas) {
-    //clona a pergunta
-    const dt = quizItem.querySelector("dl dt").cloneNode(true);
-    //coloca a resposta
-    dt.querySelector("span").textContent = resposta;
-    dt.querySelector('input').setAttribute('name', 'pergunta' + perguntas.indexOf(item))
-    dt.querySelector.('input').value = item.respostas.indexOf(resposta)
-    dt.querySelector.('input').onchange = (event) => {
-      const estaCorreta = event.target.value == item.correta
 
-      corretas.delete(item)
-      if(estaCorreta) {
-        corretas.add(item)
+  for (let resposta of item.respostas) {
+    // clona a pergunta
+    const dt = quizItem.querySelector("dl dt").cloneNode(true);
+    // coloca a resposta
+    dt.querySelector("span").textContent = resposta;
+    dt.querySelector('input').setAttribute('name', 'pergunta' + index);
+    dt.querySelector('input').value = item.respostas.indexOf(resposta).toString();
+    dt.querySelector('input').onchange = (event) => {
+      const estaCorreta = event.target.value == item.correta.toString();
+
+      if (estaCorreta) {
+        corretas.add(index);
+      } else {
+        corretas.delete(index);
       }
-    }
-    
-    mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas
-    
-    
-    //coloca a pergunta na tela
+
+      mostrarTotal.textContent = corretas.size + ' de ' + totalDePerguntas;
+    };
+
+    // coloca a pergunta na tela
     quizItem.querySelector("dl").appendChild(dt);
   }
+
+  // remove a primeira questão
+  quizItem.querySelector("dl dt").remove();
+
+  // coloca a pergunta na tela
+  quiz.appendChild(quizItem);
+}
 
   //remove a primeira questão
   quizItem.querySelector("dl dt").remove();
 
   //coloca a pergunta na tela
   quiz.appendChild(quizItem);
-}
